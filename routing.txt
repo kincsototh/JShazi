@@ -1,0 +1,91 @@
+entitások: 
+    - teacher 
+        - id
+        - name
+        - field/instrument
+        - e-mail
+        - phone number
+    
+    - student
+        - id
+        - teacher_id
+        - name 
+        - age
+        - e-mail of parent
+
+use-case: 
+    - user actions:
+    (teacher management)
+        - add teacher 
+        - delete teacher
+        - mod/update teacher
+        - teacher list
+
+    (student management)
+        - student list 
+        - add student
+        - delete student
+        - mod/update student
+
+screen: 
+    1. welcome page
+    2. teacher list
+        table 
+            - del start point 
+            - mod start point
+            - student list start point 
+        - new/add start point
+    3. new/mod teacher 
+    4. student list 
+        table 
+            - del start point 
+            - mod start point 
+        - new/add start point 
+    5. no screen for delete
+
+renderMW = (viewFileName)=>{
+    return (req,res,next) => {
+        res.render(viewFileName,{...});
+    }
+}
+
+
+
+MW-ek: 
+    getTeacherMW - betölti a tanárt ID alapján 
+    saveTeacherMW - tanár elmentése 
+    saveStudentMW - diák elmentése
+    deleteTeacherMW
+    deleteStudentMW
+    renderMW 
+
+
+
+route: 
+    GET /                                   start screen (welcome page)
+        renderMW('welcome.html')
+    POST /                                  start screen (welcome page)
+
+    GET /teachers                           teacher list 
+        renderMW('teachers.html')
+        
+    POST /teachers                          teacher list 
+
+    GET /teachers/new                       new teacher page
+        renderMW('addteacher.html') 
+    POST /teachers/new                      new teacher page 
+
+    GET /teachers/:teacher_id/edit          modifying teacher
+        renderMW('editteacher.html')
+    POST /teachers/:teacher_id/edit         modifying teacher
+
+    DELETE /teachers/:teacher_id            delete teacher (+ students)
+
+    GET /teachers/:teacher_id/students      teacher’s student list
+        renderMW('students.html')
+
+    GET /students/:student_id/edit          edit student
+        renderMW('editstudent.html')
+    POST /students/:student_id/edit         update student 
+    
+    DELETE /students/:student_id            delete student
