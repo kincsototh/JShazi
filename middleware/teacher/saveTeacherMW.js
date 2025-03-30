@@ -5,8 +5,8 @@
  */
 const requireOption = require('../requireOption');
 
-module.exports = function (objectrepository) {
+module.exports = function (objRepo) {
     return function (req, res, next) {
-        next();
+        return res.redirect('/teachers');
     };
 };

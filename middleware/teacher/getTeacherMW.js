@@ -4,8 +4,18 @@
  */
 const requireOption = require('../requireOption');
 
-module.exports = function (objectrepository) {
-    return function (req, res, next) {
-        next();
+module.exports = (objRepo) => {
+    return (req, res, next) => {
+        const teacherid = req.params.teacherid;
+        const teacher = objRepo.teachers.find(t => t.id == teacherid);  // Itt történik a keresés
+
+        if (!teacher) {
+            return res.status(404).send('Teacher not found');
+        }
+
+        res.locals.teacher = teacher;
+        return next();
     };
 };
+
+

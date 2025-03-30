@@ -4,11 +4,11 @@
 
 const requireOption = require('./requireOption');
 
-module.exports = function (objectrepository, viewName) {
+module.exports = function (objRepo, viewName) {
     return function (req, res) {
-        //res.render(viewName, res.tpl);
+        res.render(viewName, res.locals);
         console.log('render: ' + viewName);
-        res.end('Template: ' + viewName);
+        //res.end('Template: ' + viewName);
     };
 
 };

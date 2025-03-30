@@ -5,8 +5,17 @@
  */
 const requireOption = require('../requireOption');
 
-module.exports = function (objectrepository) {
+module.exports = function (objRepo) {
     return function (req, res, next) {
-        next();
+        if (!res.locals.teacher) {
+            return next(new Error("Teacher not found"));
+        }
+
+        if (req.method === "GET") {
+            return next();
+        }
+
+        return res.redirect('/teachers');
     };
 };
+

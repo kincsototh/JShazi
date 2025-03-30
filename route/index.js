@@ -10,53 +10,85 @@ const saveStudentMW = require('../middleware/student/saveStudentMW');
 const saveTeacherMW = require('../middleware/teacher/saveTeacherMW');
 
 const getTeacherMW = require('../middleware/teacher/getTeacherMW');
+const getStudentMW = require('../middleware/student/getStudentMW');
 
 const modTeacherMW = require('../middleware/teacher/modTeacherMW');
 const modStudentMW = require('../middleware/student/modStudentMW');
 
 const renderWelcomeMW = require('../middleware/renderWelcomeMW');
 
+
 module.exports = function (app) {
     const objRepo = {};
 
     // Kezdőlap (csak render)
-    app.get('/', renderWelcomeMW());
-
+    app.get('/', renderWelcomeMW);
 
     //Teacher stuff
-    app.get('/teacher',
+    app.get('/teachers',
         listTeachersMW(objRepo),
         renderMW(objRepo, 'teachers'));
 
-    app.post('/teacher/new',
-        saveTeacherMW(objRepo),
+    app.get('/teachers/new', 
         renderMW(objRepo, 'newteacher'));
 
-    app.get('/teacher/edit/:teacherid',
+    app.post('/teachers/new',
+        saveTeacherMW(objRepo), 
+        renderMW(objRepo, 'teachers')); 
+
+    app.get('/teachers/edit/:teacherid',
         getTeacherMW(objRepo),
         modTeacherMW(objRepo),
-        renderMW(objRepo, 'modteacher'));
+        renderMW(objRepo, 'modteacher')
+    );
 
-    app.get('/teachers/:teacherid/delete',
+    app.post('/teacher/edit/:teacherid',
         getTeacherMW(objRepo),
-        delTeacherMW(objRepo));
+        modTeacherMW(objRepo),
+        function (req, res) {
+            res.redirect('/teachers');
+        }
+    );
 
+    app.get('/teachers/delete/:teacherid', function (req, res) {
+        res.redirect('/teachers');
+    });
+    
+
+    app.post('/teachers/delete/:teacherid',
+        getTeacherMW(objRepo), // Megkeresi a tanárt
+        delTeacherMW(objRepo), // Törli a tanárt
+        function (req, res) {  // Átirányít a teachers oldalra
+            res.redirect('/teachers');
+        }
+    );
+    
     //Student stuff
-    app.get('/teachers/:teacherid/students',
+    app.get('/teachers/:teacherid',
         getTeacherMW(objRepo),
         listStudentsMW(objRepo),
         renderMW(objRepo, 'students'));
 
+    app.get('/teachers/:teacherid/new',
+        getTeacherMW(objRepo),
+        renderMW(objRepo, 'newstudent'));    
+
     app.post('/teachers/:teacherid/new',
         getTeacherMW(objRepo),
-        saveStudentMW(objRepo),
-        renderMW(objRepo, 'newstudent'));
-
+        function (req, res) {
+            res.redirect('/teachers/' + req.params.teacherid);
+        }
+    );
+        
     app.get('/teachers/:teacherid/edit/:studentid',
         getTeacherMW(objRepo),
-        listStudentsMW(objRepo),
-        modStudentMW(objRepo),
+        getStudentMW(objRepo),
         renderMW(objRepo, 'modstudent'));
+
+    app.get('/teachers/:teacherid',
+        getTeacherMW(objRepo),
+        listStudentsMW(objRepo),
+        renderMW(objRepo, 'students'));
 
     app.get('/teachers/:teacherid/del/:studentid',
         getTeacherMW(objRepo),

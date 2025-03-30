@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ZENEISKOLAI NYILVÁNTARTÁS</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="d-flex align-items-center mb-3 mt-3">
+                <h2 class="mb-0">EDITING TEACHER</h2>
+            </div>
+
+            <form method="POST" action="/teacher/edit/<%= teacher.id %>">
+                <div class="form-group row">
+                    <label for="inputName3" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputName3" name="name" value="<%= teacher.name %>" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputField3" class="col-sm-2 col-form-label">Field</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputField3" name="field" value="<%= teacher.instrument %>" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">E-mail</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="inputEmail3" name="email" value="<%= teacher.email %>" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputPhone3" class="col-sm-2 col-form-label">Phone number</label>
+                    <div class="col-sm-10">
+                        <input type="tel" class="form-control" id="inputPhone3" name="phone" value="<%= teacher.phone %>" required>
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary ms-3">Save and back</button>
+                        <a href="/teachers" class="btn btn-secondary ms-3">Back</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
