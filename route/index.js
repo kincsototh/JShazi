@@ -19,7 +19,10 @@ const renderWelcomeMW = require('../middleware/renderWelcomeMW');
 
 
 module.exports = function (app) {
-    const objRepo = {};
+    const objRepo = {
+        TeacherModel: require('../models/teacher'),
+        StudentModel: require('../models/student')
+    };
 
     // Kezdőlap (csak render)
     app.get('/', renderWelcomeMW);
@@ -56,12 +59,12 @@ module.exports = function (app) {
     
 
     app.post('/teachers/delete/:teacherid',
-        getTeacherMW(objRepo), // Megkeresi a tanárt
-        delTeacherMW(objRepo), // Törli a tanárt
-        function (req, res) {  // Átirányít a teachers oldalra
-            res.redirect('/teachers');
+        getTeacherMW(objRepo),
+        delTeacherMW(objRepo),
+        function (req, res) {
+          res.redirect('/teachers');
         }
-    );
+      );
     
     //Student stuff
     app.get('/teachers/:teacherid',
@@ -73,17 +76,29 @@ module.exports = function (app) {
         getTeacherMW(objRepo),
         renderMW(objRepo, 'newstudent'));    
 
-    app.post('/teachers/:teacherid/new',
-        getTeacherMW(objRepo),
-        function (req, res) {
-            res.redirect('/teachers/' + req.params.teacherid);
-        }
-    );
+        app.post('/teachers/:teacherid/new',
+            getTeacherMW(objRepo),
+            saveStudentMW(objRepo),
+            function (req, res) {
+                res.redirect('/teachers/' + req.params.teacherid);
+            }
+        );
+        
         
     app.get('/teachers/:teacherid/edit/:studentid',
         getTeacherMW(objRepo),
         getStudentMW(objRepo),
         renderMW(objRepo, 'modstudent'));
+
+    app.post('/teachers/:teacherid/edit/:studentid',
+        getTeacherMW(objRepo),
+        getStudentMW(objRepo),
+        modStudentMW(objRepo),
+        function (req, res) {
+            res.redirect('/teachers/' + req.params.teacherid);
+        }
+        );
+          
 
     app.get('/teachers/:teacherid',
         getTeacherMW(objRepo),
@@ -92,7 +107,8 @@ module.exports = function (app) {
 
     app.get('/teachers/:teacherid/del/:studentid',
         getTeacherMW(objRepo),
-        listStudentsMW(objRepo),
-        delStudentMW(objRepo),
-        renderMW(objRepo, 'students'));
+        getStudentMW(objRepo),
+        delStudentMW(objRepo)
+        );
+          
 };

@@ -6,7 +6,23 @@
 const requireOption = require('../requireOption');
 
 module.exports = function (objRepo) {
-    return function (req, res, next) {
-        return res.redirect('/teachers');
-    };
+  const TeacherModel = requireOption(objRepo, 'TeacherModel');
+
+  return function (req, res, next) {
+    if (!req.body.name || !req.body.field || !req.body.email || !req.body.phone) {
+      return res.status(400).send('Missing fields');
+    }
+
+    const teacher = new TeacherModel({
+      name: req.body.name,
+      field: req.body.field,
+      email: req.body.email,
+      phone: req.body.phone
+    });
+
+    teacher.save()
+      .then(() => res.redirect('/teachers'))
+      .catch(err => next(err));
+  };
 };
+

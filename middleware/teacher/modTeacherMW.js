@@ -6,16 +6,27 @@
 const requireOption = require('../requireOption');
 
 module.exports = function (objRepo) {
-    return function (req, res, next) {
-        if (!res.locals.teacher) {
-            return next(new Error("Teacher not found"));
-        }
+  const TeacherModel = requireOption(objRepo, 'TeacherModel');
 
-        if (req.method === "GET") {
-            return next();
-        }
+  return function (req, res, next) {
+    if (!res.locals.teacher) {
+      return next(new Error('Teacher not loaded'));
+    }
 
-        return res.redirect('/teachers');
-    };
+    if (req.method === 'GET') {
+      return next();
+    }
+
+    const t = res.locals.teacher;
+    t.name = req.body.name;
+    t.field = req.body.field;
+    t.email = req.body.email;
+    t.phone_num = req.body.phone;
+
+    t.save()
+      .then(() => res.redirect('/teachers'))
+      .catch(err => next(err));
+  };
 };
+
 

@@ -36,13 +36,15 @@
                 </div>
               </td>
               <td><%= teacher.name %></td>
-              <td><%= teacher.instrument %></td>
+              <td><%= teacher.field %></td>
               <td><%= teacher.email %></td>
               <td><%= teacher.phone %></td>
               <td class="d-flex justify-content-end">
                 <div class="btn-group btn-group-sm" role="group">
                   <a href="/teachers/edit/<%= teacher.id %>" class="btn btn-primary ms-3">Update</a>
-                  <a href="/teachers/delete/<%= teacher.id %>" class="btn btn-danger ms-3">Delete</a>
+                  <form method="POST" action="/teachers/delete/<%= teacher._id %>" style="display: inline;">
+                    <button type="submit" class="btn btn-danger ms-3">Delete</button>
+                  </form>
                 </div>
               </td>
             </tr>

@@ -5,23 +5,24 @@
  */
 const requireOption = require('../requireOption');
 
-const getStudentMW = (objRepo) => {
-    return (req, res, next) => {
-        const { teacherid, studentid } = req.params;
-        
-        if (!objRepo.studentModel) {
-            return res.status(500).send('Student model is not available');
-        }
-        
-        const student = objRepo.studentModel.find(student => student.id === studentid && student.teacherId === teacherid);
-        
-        if (student) {
-            res.locals.student = student;  // Átadjuk a student adatot a nézetnek
-            next();
-        } else {
-            res.status(404).send('Student not found');
-        }
-    };
-};
+module.exports = function (objRepo) {
+  const StudentModel = requireOption(objRepo, 'StudentModel');
 
-module.exports = getStudentMW;
+  return function (req, res, next) {
+    if (!res.locals.student) {
+      return next(new Error('Student not loaded'));
+    }
+
+    if (req.method === 'GET') {
+      return next();
+    }
+
+    res.locals.student.name = req.body.name;
+    res.locals.student.age = req.body.age;
+    res.locals.student.email_parent = req.body.email_parent;
+
+    res.locals.student.save()
+      .then(() => res.redirect(`/teachers/${req.params.teacherid}`))
+      .catch(err => next(err));
+  };
+};

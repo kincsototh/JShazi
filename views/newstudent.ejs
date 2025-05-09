@@ -14,34 +14,33 @@
             <div class="d-flex align-items-center mb-3 mt-3">
                 <h2 class="mb-0">ADD NEW STUDENT</h2>
             </div>
-
-            <!-- FORM (de nincs mentés, csak visszanavigál) -->
-            <form>
+            <form method="POST" action="/teachers/<%= teacher._id %>/new">
                 <div class="form-group row">
                     <label for="inputName3" class="col-sm-2 col-form-label">Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="inputName3">
+                        <input type="text" class="form-control" id="inputName3" name="name" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputAge3" class="col-sm-2 col-form-label">Age</label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="inputAge3">
+                        <input type="number" class="form-control" id="inputAge3" name="age" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputEmail3" class="col-sm-2 col-form-label">E-mail of parent</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3">
+                        <input type="email" class="form-control" id="inputEmail3" name="email_parent" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <a href="/teachers/<%= teacher.id %>" class="btn btn-primary ms-3">Save and back</a>
-                        <a href="/teachers/<%= teacher.id %>" class="btn btn-primary ms-3">Back</a>
+                        <button type="submit" class="btn btn-primary ms-3">Save and back</button>
+                        <a href="/teachers/<%= teacher._id %>" class="btn btn-secondary ms-3">Back</a>
                     </div>
                 </div>
             </form>
+            
         </div>
     </div>
 
